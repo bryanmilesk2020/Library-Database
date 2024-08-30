@@ -1,0 +1,110 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#define TEST //you can comment out this pre-processor directive if you don't want the test objects
+				//defined in the main function and instead want to create your own library from scratch
+
+class Book { //template for an individual book in a library
+public:
+	std::string title; //attributes for each book
+	std::string author;
+	int publicationYear;
+	bool isCheckedOut;
+
+	Book(std::string t, std::string a, int yr, bool check) { //constructor to initialize object w/ attributes
+		title = t;
+		author = a;
+		publicationYear = yr;
+		isCheckedOut = check;
+	}
+
+	void checkedOut() { //*needs work but lets user know book is checked out if library is printed
+		isCheckedOut = true;
+		
+	}
+
+	void returnBook() { //* lets user know if book is back in library
+		isCheckedOut = false;
+
+	}
+
+	void displayDetails() { // details of book
+		std::cout << "Title: " << title << '\n';
+		std::cout << "Author: " << author << '\n';
+		std::cout << "Publication year:" << publicationYear << '\n';
+		if (isCheckedOut == true) {
+			std::cout << "Is checked out." << '\n';
+		}
+		else {
+			std::cout << "Is not checked out." << '\n';
+		}
+	}
+
+};
+
+class Library { //template that runs vector of books (aka library)
+public:
+	std::vector<Book> library;
+
+	std::vector<Book> addBook(const Book& book) { //adds book to back of vector
+		library.push_back(book);
+		return library;
+	}	
+
+	std::vector<Book> removeBook(int index) { 
+		if (index >= 0 && index < library.size()) { //makes sure its a book object inside libary vector
+			library.erase(library.begin() + index); //begin (0) + index, locates index of desired book
+		}											//and erases it
+
+		return library;
+	}
+
+	void printLibrary() { //prints library
+		for (int i = 0; i < library.size(); i++) {
+			library[i].displayDetails(); //each index in the library holds a book object, and invokes
+			std::cout << '\n'; //the displayDetails method for that object
+		}
+	}
+
+	void checkOutBook(int index) {
+		if (index >= 0 && index < library.size()) { 
+			library[index].checkedOut(); //locates book using index provided as the passing arguement
+		}									//invokes the checkedOut method in Book class to change
+	}											// bool isCheckedOut to true
+
+};
+
+
+int main(){
+
+	Library library;
+
+#ifdef TEST
+
+	Book book0("Ethics", "Benedict de Spinoza", 1677, false);
+
+	library.addBook(book0);
+
+	Book book1("Apology", "Socrates", 35, false);
+
+	library.addBook(book1);
+
+	Book book2("Lord of the Rings", "JRR Tolkein", 1954, false);
+
+	library.addBook(book2);
+
+	library.checkOutBook(2);
+
+	library.removeBook(1);
+
+	Book book3("Farenheit 451", "Ray Bradbury", 1953, false);
+
+	library.addBook(book3);
+
+#endif
+
+	library.printLibrary();
+
+	
+
+}
